@@ -12,18 +12,18 @@
 
 <!-- 태그선언은 <태그이름> ... </태그이름> 또는 <태그이름/> 이 되어야 한다 -->
 
-<VBox alignment="CENTER" prefHeight="112.0" prefWidth="374.0" spacing="20.0" xmlns:fx="http://javafx.com/fxml">
+<VBox alignment="CENTER" maxHeight="112.0" maxWidth="374.0" prefHeight="112.0" prefWidth="374.0" spacing="20.0" xmlns:fx="http://javafx.com/fxml" fx:controller="excelConvert.controller.CoverController">
    <children>
       <ImageView fitHeight="119.0" fitWidth="385.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@images/stjohnsLogo.png" />
+            <Image url="@../images/stjohnsLogo.png" />
          </image>
       </ImageView>
       <Label text="현재 기간별 구매 리스트만 확인 가능합니다" />
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
          <children>
-            <Button text="종료" />
-            <Button text="시작하기" />
+            <Button fx:id="exit" text="종료" />
+            <Button fx:id="start" text="시작하기" />
          </children>
       </HBox>
    </children>
