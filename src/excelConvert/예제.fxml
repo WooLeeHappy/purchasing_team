@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>                      <!-- xml 선언 -->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import java.lang.Double?>
+<?import javafx.collections.FXCollections?>
+
+<!-- 태그선언은 <태그이름> ... </태그이름> 또는 <태그이름/> 이 되어야 한다 -->
+
+<?import java.lang.String?>
+<HBox xmlns:fx="http://javafx.com/fxml">                    <!-- HBox 컨테이너 선택 -->
+    <padding>                                               <!-- 안쪽여백설정 -->
+        <Insets top="10" right="10" bottom="10" left="10"/> <!-- Hbox의 padding 설정 방식 -->
+        <Insets topRightBottomLeft="10"/>
+        <Insets right="10"/>
+    </padding>
+
+    <spacing>10</spacing>                                   <!-- 컨트롤간에 수평 간격 설정 -->
+
+    <children>                                              <!-- 자식컨트롤 추가 -->
+        <TextField>                                         <!-- 텍스트필드 선언 -->
+            <prefWidth>700</prefWidth>                      <!-- 텍스트필드 폭 설정 -->
+        </TextField>
+        <Button>                                            <!-- 버튼컨트롤 선언 -->
+            <HBox.margin>                                   <!-- 바깥여백설정 -->
+                <Insets topRightBottomLeft="50"/>           <!-- Button의 margin 설정 방식 -->
+                <Insets right="50"/>
+            </HBox.margin>
+            <text>확인</text>                                <!-- 버튼 글자 설정 선언 -->
+        </Button>
+        <Button>
+            <maxWidth>
+                <Double fx:constant="MAX_VALUE"/>           <!-- 클래스 fx:constant="상수"> -->
+                                                            <!-- 클래스에 정의된 상수값을 얻고 싶을때 사용 -->
+            </maxWidth>
+        </Button>
+        <ComboBox>                                          <!-- 콤보박스는 리스트를 나체내게 하는 방식 -->
+            <items>
+                <FXCollections fx:factory="observableArrayList">    <!-- 리스트를 통해 어떤 값을 나타낼건지 보여줌 -->
+                    <String fx:value="공개"/>                        <!-- 객체 -->
+                    <String fx:value="비공개"/>                       <!-- 객체 -->
+                </FXCollections>
+            </items>
+        </ComboBox>
+    </children>
+</HBox>
+
