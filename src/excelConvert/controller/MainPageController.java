@@ -8,11 +8,21 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.stage.FileChooser;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.File;
 import java.io.FileInputStream;
+
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 
 public class MainPageController implements Initializable {
@@ -74,17 +84,6 @@ public class MainPageController implements Initializable {
             System.out.println("파일업로드 실패");
         }
     }
-    // 버튼 and 드래그한 파일 오픈하기  ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-    private void openFile(File file) {
-        try {
-            FileInputStream inputStream = new FileInputStream(file);
-            // FileInputStream 객체를 사용하여 Excel 파일의 데이터를 읽어오는 코드 작성
-            inputStream.close();
-            System.out.println("파일오픈 및 인풋스트림 닫기 성공");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     // 파일 체크     ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
     private boolean isExcelFile(File file) {
@@ -103,7 +102,6 @@ public class MainPageController implements Initializable {
     // 토글 선택 관련 컨트롤   ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
     @FXML private ToggleGroup upDown;
     @FXML private Button convert;
-    private String check;
     @FXML private TextField amount;
 
     @FXML
@@ -116,6 +114,7 @@ public class MainPageController implements Initializable {
                         String amountStr = amount.getText();
                         int amount = Integer.parseInt(amountStr);
                         String selectedText = selectedRadioButton.getText();
+                        String check;
                         if(selectedText.equals("이상")) {
                             check = "up";
                         } else {
@@ -153,12 +152,61 @@ public class MainPageController implements Initializable {
     //  엑셀 파일 변환작업
     public void converting(int amount ,String check) {
 
-        if(check.equals("up")) {
-            System.out.println("체크 컨버팅 up");
-            System.out.println(amount);
-        } else {
-            System.out.println("체크 컨버팅 down");
-            System.out.println(amount);
+        switch (check) {
+            case "up":
+                try {
+                    FileInputStream excelFile = new FileInputStream(file);
+                    XSSFWorkbook workbook = new XSSFWorkbook(excelFile);
+                    XSSFSheet sheet = workbook.getSheetAt(0);
+
+                    int rowNo = 0;
+                    int cellIndex = 0;
+
+
+                    readExcel(sheet);
+
+
+                    excelFile.close();
+                    System.out.println("파일오픈 및 인풋스트림 닫기 성공");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+
+                System.out.println("체크 컨버팅 up");
+                System.out.println(amount);
+                break;
+
+
+
+
+
+            case "down":
+                System.out.println("체크 컨버팅 down");
+                System.out.println(amount);
+                break;
+        }
+    }
+
+    // 엑셀 정렬 메서드
+    public void readExcel(Sheet sheet) throws IOException {
+        for (Row row : sheet) {
+            // 각각의 행에 존재하는 모든 열(cell)을 순회한다.
+            Iterator<Cell> cellIterator = row.cellIterator();
+
+            while (cellIterator.hasNext()) {
+                Cell cell = cellIterator.next();
+
+                // cell의 타입을 하고, 값을 가져온다.
+                switch (cell.getCellType()) {
+                    case NUMERIC ->
+                        //getNumericCellValue 메서드는 기본으로 double형 반환
+                            System.out.print((int) cell.getNumericCellValue() + "\t");
+                    case STRING -> System.out.print(cell.getStringCellValue() + "\t");
+                }
+            }
+            System.out.println("");
         }
     }
 }
