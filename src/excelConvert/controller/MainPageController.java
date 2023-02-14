@@ -172,8 +172,6 @@ public class MainPageController implements Initializable {
                     e.printStackTrace();
                 }
 
-
-
                 System.out.println("체크 컨버팅 up");
                 System.out.println(amount);
                 break;
@@ -189,7 +187,7 @@ public class MainPageController implements Initializable {
         }
     }
 
-    // 엑셀 정렬 메서드
+    // 엑셀 읽기 메서드
     public void readExcel(Sheet sheet) throws IOException {
         for (Row row : sheet) {
             // 각각의 행에 존재하는 모든 열(cell)을 순회한다.
