@@ -34,10 +34,11 @@
                            <children>
                               <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="230.0" text="변환 방식을 선택해주세요" textAlignment="CENTER" />
                               <HBox prefHeight="154.0" prefWidth="228.0" />
-                              <TextField alignment="CENTER_RIGHT" prefHeight="63.0" prefWidth="228.0" promptText="금액">
+                              <TextField fx:id="amount" alignment="CENTER_RIGHT" prefHeight="63.0" prefWidth="228.0" promptText="금액">
                                  <font>
                                     <Font size="14.0" />
-                                 </font></TextField>
+                                 </font>
+                              </TextField>
                               <HBox alignment="CENTER" prefHeight="32.0" prefWidth="228.0">
                                  <children>
                                     <RadioButton mnemonicParsing="false" text="이상" toggleGroup="$upDown">
