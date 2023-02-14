@@ -3,42 +3,35 @@ package excelConvert.controller;
 import excelConvert.AppMain;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 
-public class CoverController {
-    @FXML
-    private Button exit;
+public class CoverController implements Initializable {
+    @FXML private Button exit;
+    @FXML private Button start;
 
-    @FXML
-    private Button start;
 
-    public void initialize() {
-        exit.setOnAction(Event -> {
-                Platform.exit();
-        });
-        start.setOnAction(Event -> {
-            try {
-                Parent main = FXMLLoader.load(getClass().getClassLoader().getResource("mainpage.fxml"));
-
-                Scene scene = new Scene(main);
-                Stage secondScene = (Stage) start.getScene().getWindow();
-                secondScene.setScene(scene);
-                secondScene.show();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        exit.setOnAction(this::exitAction);
+        start.setOnAction(event -> startAction(event));
     }
 
-
+    public void exitAction(ActionEvent event) {
+        Platform.exit();
+    }
+    public void startAction(ActionEvent event) {
+//        Parent root = FXMLLoader.load(getClass().getResource("../fxmlFile/mainpage.fxml"));
+//        Scene scene = new Scene(root);
+    }
 }

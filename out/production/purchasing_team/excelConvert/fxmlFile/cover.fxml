@@ -24,6 +24,11 @@
          <children>
             <Button fx:id="exit" text="종료" />
             <Button fx:id="start" text="시작하기" />
+<!--            <Button fx:id="exam" text="이미지버튼 예제">-->
+<!--               <graphic>-->
+<!--                  <ImageView url="@images/파일명.jpg"/>-->
+<!--               </graphic>-->
+<!--            </Button>-->
          </children>
       </HBox>
    </children>
