@@ -1,5 +1,8 @@
 package excelConvert.controller;
 
+import excelConvert.service.MainpageFristFunctionService;
+import excelConvert.service.MainpageUploadService;
+import excelConvert.service.ReadExcelService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,19 +16,19 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.File;
 import java.io.FileInputStream;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 
 public class MainPageController implements Initializable {
+    MainpageFristFunctionService mainpageFristFunctionService = new MainpageFristFunctionService();
+    MainpageUploadService mainpageUploadService = new MainpageUploadService();
+    ReadExcelService readExcelService = new ReadExcelService();
 
     @FXML
     private Button fileUpload1;
@@ -41,62 +44,20 @@ public class MainPageController implements Initializable {
 
     }
 
-    // 아래 두 메서드는 드래그 파일해서 엑셀가져오기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+    // 아래 두 개는 드래그 파일해서 엑셀가져오기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
     @FXML
     private void handleDragOver(DragEvent event) {
-        Dragboard db = event.getDragboard();
-        if (db.hasFiles() && isExcelFile(db.getFiles().get(0))) {
-            System.out.println("드래그 시도");
-            event.acceptTransferModes(TransferMode.COPY);
-            System.out.println("드래그 성공");
-        } else {
-            event.consume();
-        }
+        mainpageUploadService.handleDragOver(event);
     }
     @FXML
     private void handleDragDropped(DragEvent event) {
-        System.out.println("드롭다운 시도");
-        Dragboard db = event.getDragboard();
-        boolean success = false;
-        if (db.hasFiles() && isExcelFile(db.getFiles().get(0))) {
-            file = db.getFiles().get(0);
-            fileName.setText(file.getName());
-            success = true;
-        }
-        event.setDropCompleted(success);
-        event.consume();
-        System.out.println("드롭다운 성공");
+        file = mainpageUploadService.handleDragDropped(event, fileName);
     }
-
-
 
     // 버튼 파일 업로드 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
     @FXML
     public void uploadFile(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx", "*.xls"));
-        file = fileChooser.showOpenDialog(null);
-
-        if (file != null) {
-            fileName.setText(file.getName());
-            System.out.println("파일업로드 성공");
-        } else {
-            System.out.println("파일업로드 실패");
-        }
-    }
-
-    // 파일 체크     ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-    private boolean isExcelFile(File file) {
-        String fileName = file.getName();
-        int lastIndex = fileName.lastIndexOf('.');
-        if (lastIndex > 0 && lastIndex < fileName.length() - 1) {
-            String fileExtension = fileName.substring(lastIndex + 1).toLowerCase();
-            if (fileExtension.equals("xls") || fileExtension.equals("xlsx")) {
-                System.out.println("엑셀파일 체크 성공");
-                return true;
-            }
-        }
-        return false;
+        file = mainpageUploadService.uploadFile(event, fileName);
     }
 
     // 토글 선택 관련 컨트롤   ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -159,11 +120,7 @@ public class MainPageController implements Initializable {
                     XSSFWorkbook workbook = new XSSFWorkbook(excelFile);
                     XSSFSheet sheet = workbook.getSheetAt(0);
 
-                    int rowNo = 0;
-                    int cellIndex = 0;
-
-
-                    readExcel(sheet);
+                    readExcelService.readExcel(sheet);
 
 
                     excelFile.close();
@@ -178,11 +135,9 @@ public class MainPageController implements Initializable {
                 System.out.println(amount);
                 break;
 
-
-
-
-
             case "down":
+                System.out.println("여긴되고");
+                System.out.println(file.getName());
                 System.out.println("체크 컨버팅 down");
                 System.out.println(amount);
                 break;
@@ -191,6 +146,8 @@ public class MainPageController implements Initializable {
 
     // 엑셀 정렬 메서드
     public void readExcel(Sheet sheet) throws IOException {
+//        readExcelService.readExcel(sheet);
+
         for (Row row : sheet) {
             // 각각의 행에 존재하는 모든 열(cell)을 순회한다.
             Iterator<Cell> cellIterator = row.cellIterator();
