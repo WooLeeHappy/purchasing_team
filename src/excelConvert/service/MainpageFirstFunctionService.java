@@ -39,7 +39,7 @@ public class MainpageFirstFunctionService {
 
         String selectedText = selectedRadioButton.getText();
         String check = "down";
-        if ("이상".equals(selectedText)) {
+        if (selectedText.equals("이상")) {
             check = "up";
         }
 
@@ -86,4 +86,5 @@ public class MainpageFirstFunctionService {
                 break;
         }
     }
+    
 }
