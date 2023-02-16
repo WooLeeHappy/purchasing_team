@@ -63,6 +63,7 @@ public class MainPageController implements Initializable {
     @FXML
     public void checkOption(ActionEvent event) {
         mainpageFirstFunctionService.checkOption(file, upDown, amount, fileName);
+        System.out.println("여기까진 보냈음");
     }
     // 엑셀 읽기 메서드
     public void readExcel(Sheet sheet) throws IOException {

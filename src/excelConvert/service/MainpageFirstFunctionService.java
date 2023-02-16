@@ -7,6 +7,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class MainpageFirstFunctionService {
@@ -38,53 +39,66 @@ public class MainpageFirstFunctionService {
         }
 
         String selectedText = selectedRadioButton.getText();
-        String check = "down";
-        if (selectedText.equals("이상")) {
+        String check = "Defalut";
+        if (selectedText.equals("Asc")) {
             check = "up";
+        } else if (selectedText.equals("Desc")) {
+            check = "down";
         }
+        System.out.println("여기까진옴?");
 
         converting(new FirstFunctionFileDto(file, check, amount));
     }
-    // 텍스트필드에 있는 숫자를 int값으로 변경해주는 작업
-    private int strToInt(TextField amount) {
-        String amountStr = amount.getText();
-        return Integer.parseInt(amountStr);
-    }
+
 
     public void converting(FirstFunctionFileDto fileDto) {
         File file = fileDto.getFile();
         String check = fileDto.getCheck();
         int amount = fileDto.getAmount();
+//        File fileDe = deDuplication(file);
+
+
 
         switch (check) {
             case "up":
+                // 엑셀 파일 열기
                 try {
                     FileInputStream excelFile = new FileInputStream(file);
                     XSSFWorkbook workbook = new XSSFWorkbook(excelFile);
                     XSSFSheet sheet = workbook.getSheetAt(0);
+                    int rows = sheet.getLastRowNum();
+                    int cols = sheet.getRow(1).getLastCellNum();
+
+
+
 
                     readExcelService.readExcel(sheet);
-
-
                     excelFile.close();
                     System.out.println("파일오픈 및 인풋스트림 닫기 성공");
+                    System.out.println("체크 컨버팅 up");
+                    System.out.println(amount);
+
+
+                } catch (FileNotFoundException e) {
+                    // 파일이 존재하지 않는 경우
+                    alertService.showAlert("파일 업로드 실패", "선택한 파일이 존재하지 않습니다.");
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    // 파일 읽기 중에 오류가 발생한 경우
+                    alertService.showAlert("파일 업로드 실패", "선택한 파일을 읽지 못했습니다");
                 }
-
-
-
-                System.out.println("체크 컨버팅 up");
-                System.out.println(amount);
                 break;
-
             case "down":
                 System.out.println("여긴되고");
                 System.out.println(file.getName());
                 System.out.println("체크 컨버팅 down");
                 System.out.println(amount);
                 break;
+
         }
     }
-    
+
+    private File deDuplication(File file) {
+
+    }
+
 }
