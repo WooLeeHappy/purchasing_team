@@ -1,5 +1,7 @@
 package excelConvert.controller;
 
+import excelConvert.AppMain;
+import excelConvert.service.DownloadExcel;
 import excelConvert.service.MainpageFirstFunctionService;
 import excelConvert.service.MainpageUploadService;
 import excelConvert.service.ReadExcelService;
@@ -8,14 +10,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.DragEvent;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import java.io.File;
-import java.io.FileInputStream;
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,9 +20,11 @@ import java.util.ResourceBundle;
 
 
 public class MainPageController implements Initializable {
+    AppMain appMain = new AppMain();
     MainpageFirstFunctionService mainpageFirstFunctionService = new MainpageFirstFunctionService();
     MainpageUploadService mainpageUploadService = new MainpageUploadService();
     ReadExcelService readExcelService = new ReadExcelService();
+    DownloadExcel downloadExcel = new DownloadExcel();
 
     @FXML
     private Button fileUpload1;
@@ -38,7 +37,13 @@ public class MainPageController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         fileUpload1.setOnAction(this::uploadFile);
         convert.setOnAction(this::checkOption);
+        download.setOnAction(this::download);
     }
+
+    private void download(ActionEvent event) {
+        downloadExcel.downloadExcel(mainpageFirstFunctionService.getWorkbook(), appMain.getPrimaryStage());
+    }
+
     // 아래 두 개는 드래그 파일해서 엑셀가져오기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
     @FXML
     private void handleDragOver(DragEvent event) {
@@ -59,6 +64,7 @@ public class MainPageController implements Initializable {
     @FXML private ToggleGroup upDown;
     @FXML private Button convert;
     @FXML private TextField amount;
+    @FXML private Button download;
 
     @FXML
     public void checkOption(ActionEvent event) {
@@ -69,4 +75,5 @@ public class MainPageController implements Initializable {
     public void readExcel(Sheet sheet) throws IOException {
         readExcelService.readExcel(sheet);
     }
+    // 엑셀 다운로드
 }

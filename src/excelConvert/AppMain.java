@@ -9,6 +9,11 @@ import javafx.stage.Stage;
 
 public class AppMain extends Application {
     private Stage primaryStage;
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
     public void changeScene(Scene scene) throws Exception {
         System.out.println("여기까지옴");
         primaryStage.setScene(scene);

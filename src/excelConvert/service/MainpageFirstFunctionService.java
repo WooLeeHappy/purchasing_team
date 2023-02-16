@@ -99,6 +99,10 @@ public class MainpageFirstFunctionService {
 
         }
     }
+    private XSSFWorkbook convertWorkbook = new XSSFWorkbook();
+    public XSSFWorkbook getWorkbook() {
+        return convertWorkbook;
+    }
 
     private void deDuplication(File file) {
         System.out.println("여긴?");
@@ -148,7 +152,7 @@ public class MainpageFirstFunctionService {
                 }
             }
             File convertFile = new File("converted_file.xlsx");
-            XSSFWorkbook convertWorkbook = new XSSFWorkbook(); // 새 엑셀 생성
+            convertWorkbook = new XSSFWorkbook(); // 새 엑셀 생성
             FileOutputStream fileoutputstream = new FileOutputStream(convertFile); // 추출
             XSSFSheet convertSheet = convertWorkbook.createSheet("convertSheet");
 
@@ -179,7 +183,7 @@ public class MainpageFirstFunctionService {
                                 case FORMULA:
                                     newCell.setCellFormula(sourceCell.getCellFormula());
                                     break;
-                                // 다른 cell type에 대한 처리도 필요하다면 추가 구현이 필요하다
+                                // 다른 cell type에 대한 처리도 필요하다면 추가 구현이 필요
                                 default:
                                     newCell.setCellValue(sourceCell.getStringCellValue());
                                     break;
@@ -188,16 +192,13 @@ public class MainpageFirstFunctionService {
                     }
                 }
             }
-
-            
+            convertWorkbook.write(fileoutputstream);
             System.out.println("엑셀파일생성성공");
 
-            convertWorkbook.close();
             workbook.close();
             excelFile.close();
             fileoutputstream.close();
-            XSSFSheet test = convertWorkbook.getSheetAt(0);
-            readExcelService.readExcel(convertSheet);
+            readExcelService.readExcel(convertWorkbook.getSheetAt(0));
 
 
             System.out.println("파일오픈 및 인풋스트림 닫기 성공");

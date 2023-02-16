@@ -1,40 +1,59 @@
 package excelConvert.service;
 
+import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Optional;
 
 public class DownloadExcel {
-    private String downloadExcel(File file, Stage primaryStage) {
-// FileChooser 객체 생성
+    public static void downloadExcel(XSSFWorkbook workbook, Stage stage) {
+        ReadExcelService readExcelService = new ReadExcelService();
+        // 파일 선택 대화상자 생성
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("변환한 파일을 저장합니다");
+        fileChooser.setTitle("Save Excel File");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
 
-        // 파일 저장 위치를 지정합니다. 이 코드에서는 현재 디렉토리를 사용합니다.
-        File currentDir = new File(".");
-        fileChooser.setInitialDirectory(currentDir);
-
-        // 파일 필터를 지정합니다. 이 코드에서는 엑셀 파일(xlsx)만 선택 가능합니다.
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel files (*.xlsx)", "*.xlsx");
-        fileChooser.getExtensionFilters().add(extFilter);
-
-        // 사용자에게 파일 선택 대화상자를 표시합니다.
-        File selectedFile = fileChooser.showSaveDialog(primaryStage);
-
+        // 사용자가 파일을 선택한 경우
+        File selectedFile = fileChooser.showSaveDialog(stage);
         if (selectedFile != null) {
-            // 선택한 파일이 존재하는 경우, 파일 경로를 반환합니다.
-            String filePath = selectedFile.getPath();
-            System.out.println("File path: " + filePath);
+            // 파일이 이미 존재하는 경우, 덮어쓸 것인지 확인
+            System.out.println("덮씁확");
+            if (selectedFile.exists()) {
+                Optional<ButtonType> result = AlertService.showConfirmationAlert("Confirmation",
+                        "The file already exists. Do you want to replace it?");
+                if (result.get() != ButtonType.OK) {
+                    return; // 저장 취소
+                }
+            }
+            System.out.println("트라이직전");
+            readExcelService.readExcel(workbook.getSheetAt(0));
+            String filePath = "." + File.separator + "output.xlsx";
 
-            // 수정된 파일을 선택한 경로에 저장하거나 반환하는 로직을 작성합니다.
 
-            // 저장된 파일 경로를 반환합니다.
-            return file.getPath();
-        } else {
-            System.out.println("File selection canceled.");
-            // 사용자가 파일 선택 대화상자를 취소한 경우, null 값을 반환합니다.
-            return null;
+            // 파일 저장
+            FileOutputStream outputStream = null;
+            try {
+                outputStream = new FileOutputStream(filePath);
+                workbook.write(outputStream);
+                System.out.println("됐음됐다해!!");
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (outputStream != null) {
+                    try {
+                        System.out.println("여긴 지나나?");
+                        outputStream.close();
+                        System.out.println("닫히기도 하구?");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
     }
 }

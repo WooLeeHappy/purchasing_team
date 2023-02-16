@@ -41,7 +41,8 @@
                         <VBox layoutX="13.0" layoutY="12.0" prefHeight="235.0" prefWidth="248.0">
                            <children>
                               <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="230.0" text="변환 방식을 선택해주세요" textAlignment="CENTER" />
-                              <HBox prefHeight="154.0" prefWidth="228.0" />
+                              <Label prefHeight="59.0" prefWidth="228.0" text="꼭 변환버튼 먼저 누른 후 다운로드해주세요" textAlignment="CENTER" wrapText="true" />
+                              <HBox prefHeight="49.0" prefWidth="228.0" />
                               <Label alignment="CENTER" prefHeight="32.0" prefWidth="228.0" text="아래에는 금액을 작성해주세요." />
                               <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="14.0" prefWidth="237.0" text="Asc는 오름차순, Desc는 내림차순">
                                  <font>
@@ -60,17 +61,17 @@
                               </TextField>
                               <HBox alignment="CENTER" prefHeight="32.0" prefWidth="228.0">
                                  <children>
-                                    <RadioButton  text="Asc" toggleGroup="$upDown">
+                                    <RadioButton text="Asc" toggleGroup="$upDown">
                                        <toggleGroup>
                                           <ToggleGroup fx:id="upDown" />
                                        </toggleGroup>
                                     </RadioButton>
-                                    <RadioButton  text="Desc" toggleGroup="$upDown">
+                                    <RadioButton text="Desc" toggleGroup="$upDown">
                                        <padding>
                                           <Insets left="10.0" right="10.0" />
                                        </padding>
                                     </RadioButton>
-                                    <RadioButton layoutX="118.0" layoutY="20.0"  text="Defalut" toggleGroup="$upDown">
+                                    <RadioButton layoutX="118.0" layoutY="20.0" text="Defalut" toggleGroup="$upDown">
                                        <toggleGroup>
                                           <ToggleGroup fx:id="upDown1" />
                                        </toggleGroup>
@@ -84,7 +85,16 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                         </VBox>
-                        <Button fx:id="convert" layoutX="273.0" layoutY="13.0" mnemonicParsing="false" prefHeight="233.0" prefWidth="93.0" text="변환" />
+                        <VBox layoutX="266.0" layoutY="14.0" prefHeight="232.0" prefWidth="100.0">
+                           <children>
+                              <Button fx:id="convert"  prefHeight="186.0" prefWidth="100.0" text="변환" />
+                              <Button fx:id="download" prefHeight="31.0" prefWidth="100.0" text="다운로드">
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </Button>
+                           </children>
+                        </VBox>
                      </children>
                   </AnchorPane>
                </children></AnchorPane>
