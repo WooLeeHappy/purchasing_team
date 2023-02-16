@@ -9,6 +9,8 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -16,7 +18,7 @@
 
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="excelConvert.controller.MainPageController">
   <tabs>
-    <Tab text="기능1번">
+    <Tab text="기능">
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
@@ -87,7 +89,7 @@
                         </VBox>
                         <VBox layoutX="266.0" layoutY="14.0" prefHeight="232.0" prefWidth="100.0">
                            <children>
-                              <Button fx:id="convert"  prefHeight="186.0" prefWidth="100.0" text="변환" />
+                              <Button fx:id="convert" prefHeight="186.0" prefWidth="100.0" text="변환" />
                               <Button fx:id="download" prefHeight="31.0" prefWidth="100.0" text="다운로드">
                                  <VBox.margin>
                                     <Insets top="20.0" />
@@ -100,10 +102,92 @@
                </children></AnchorPane>
       </content>
     </Tab>
-    <Tab text="기능2번">
+    <Tab text="필독">
       <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <VBox alignment="CENTER" layoutX="54.0" layoutY="28.0" prefHeight="200.0" prefWidth="493.0">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="0.0" prefWidth="493.0" text="현재  defalut값만 사용 가능합니다">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="8.0" prefWidth="493.0" text="금액은 현재 미구현이구여">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="8.0" prefWidth="493.0" text="교육 마지막 취업준비 하느라 바빠서 못했어요">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="8.0" prefWidth="493.0" text="잘 되는지만 테스트하고 알려주세요 ㅎㅎ;">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="8.0" prefWidth="493.0" text="변환버튼 누르면 실행파일 기준 폴더로 temp라는 이름의">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="8.0" prefWidth="493.0" text="엑셀파일 하나 생기는데,">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="8.0" prefWidth="493.0" text="그건 다운로드 버튼 누르면 자동 삭제 됩니다">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="8.0" prefWidth="493.0" text="다른 기능 필요한 거 있으면 말해주세여">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="8.0" prefWidth="493.0" text="현재 1000행 기준으로 약 5초정도 소요됩니다">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <padding>
+                              <Insets top="20.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children></AnchorPane>
       </content>
     </Tab>
+      <Tab text="사용방법">
+         <content>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <ImageView fitHeight="231.0" fitWidth="231.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/5.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="345.0" layoutX="241.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/6.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="345.0" layoutX="241.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/7.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="55.0" fitWidth="200.0" layoutX="386.0" layoutY="144.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/8.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+         </content>
+      </Tab>
   </tabs>
 </TabPane>

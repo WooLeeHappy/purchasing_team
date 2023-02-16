@@ -8,11 +8,11 @@ import javafx.scene.control.ToggleGroup;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.*;
 
 import java.io.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MainpageFirstFunctionService {
     ReadExcelService readExcelService = new ReadExcelService();
@@ -106,20 +106,23 @@ public class MainpageFirstFunctionService {
     }
 
     private void deDuplication(File file) {
+        long beforeTime = System.currentTimeMillis();
         convertWorkbook = new XSSFWorkbook();
         System.out.println("여긴?");
         try {
-            System.out.println("try시작");
             FileInputStream excelFile = new FileInputStream(file);
             XSSFWorkbook workbook = new XSSFWorkbook(excelFile);
             XSSFSheet sheet = workbook.getSheetAt(0);
             int rows = sheet.getLastRowNum();
-            // 중복되는값을 제거 첫번째
+
+            Set<String> set = new HashSet<>();
             for(int i = 2; i <= rows - 1; i++) {
-                XSSFCell beforeCell = sheet.getRow(i-1).getCell(1);
-                XSSFCell nowCell = sheet.getRow(i).getCell(1);
-                if(beforeCell.getStringCellValue().equals(nowCell.getStringCellValue())) {
-                    beforeCell.setCellValue("");
+                XSSFCell cell = sheet.getRow(i).getCell(1);
+                String value = cell.getStringCellValue();
+                if(set.contains(value)) {
+                    cell.setCellValue("");
+                } else {
+                    set.add(value);
                 }
             }
 
@@ -160,7 +163,6 @@ public class MainpageFirstFunctionService {
                     sheet.shiftRows(i + 1, lastRowNum, -1);
                 }
             }
-
 
             File convertFile = new File("converted_temp.xlsx");
             convertWorkbook = new XSSFWorkbook(); // 새 엑셀 생성
@@ -228,10 +230,6 @@ public class MainpageFirstFunctionService {
                 }
             }
 
-
-
-
-
             convertWorkbook.write(fileoutputstream);
             System.out.println("엑셀파일생성성공");
 
@@ -240,9 +238,11 @@ public class MainpageFirstFunctionService {
             fileoutputstream.close();
             readExcelService.readExcel(convertWorkbook.getSheetAt(0));
 
-
             System.out.println("파일오픈 및 인풋스트림 닫기 성공");
             System.out.println("체크 컨버팅 up");
+            long afterTime = System.currentTimeMillis();
+            long secDiffTime = (afterTime - beforeTime)/1000;
+            System.out.println("시간차이(m) : "+secDiffTime);
             alertService.showInformationAlert("파일 변환 성공", "파일을 다운로드 할 수 있습니다.");
 
         } catch (FileNotFoundException e) {
@@ -253,5 +253,4 @@ public class MainpageFirstFunctionService {
             alertService.showAlert("파일 업로드 실패", "선택한 파일을 읽지 못했습니다");
         }
     }
-
 }

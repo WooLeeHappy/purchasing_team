@@ -12,7 +12,6 @@ import java.util.Optional;
 
 public class DownloadExcel {
     public static void downloadExcel(XSSFWorkbook workbook, Stage stage) {
-        ReadExcelService readExcelService = new ReadExcelService();
 
         // 파일 선택 대화상자 생성
         FileChooser fileChooser = new FileChooser();
