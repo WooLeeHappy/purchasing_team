@@ -1,10 +1,7 @@
 package excelConvert.controller;
 
 import excelConvert.AppMain;
-import excelConvert.service.DownloadExcel;
-import excelConvert.service.MainpageFirstFunctionService;
-import excelConvert.service.MainpageUploadService;
-import excelConvert.service.ReadExcelService;
+import excelConvert.service.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -25,6 +22,7 @@ public class MainPageController implements Initializable {
     MainpageUploadService mainpageUploadService = new MainpageUploadService();
     ReadExcelService readExcelService = new ReadExcelService();
     DownloadExcel downloadExcel = new DownloadExcel();
+    AlertService alertService = new AlertService();
 
     @FXML
     private Button fileUpload1;
@@ -41,7 +39,11 @@ public class MainPageController implements Initializable {
     }
 
     private void download(ActionEvent event) {
-        downloadExcel.downloadExcel(mainpageFirstFunctionService.getWorkbook(), appMain.getPrimaryStage());
+        if(mainpageFirstFunctionService.getWorkbook() != null) {
+            downloadExcel.downloadExcel(mainpageFirstFunctionService.getWorkbook(), appMain.getPrimaryStage());
+        } else {
+            AlertService.showAlert("파일 업로드 실패", "선택한 파일이 존재하지 않습니다.");
+        }
     }
 
     // 아래 두 개는 드래그 파일해서 엑셀가져오기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ

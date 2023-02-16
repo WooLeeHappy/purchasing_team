@@ -5,11 +5,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.RegionUtil;
+import org.apache.poi.xssf.usermodel.*;
 
 import java.io.*;
 
@@ -99,12 +100,13 @@ public class MainpageFirstFunctionService {
 
         }
     }
-    private XSSFWorkbook convertWorkbook = new XSSFWorkbook();
+    private XSSFWorkbook convertWorkbook = null;
     public XSSFWorkbook getWorkbook() {
         return convertWorkbook;
     }
 
     private void deDuplication(File file) {
+        convertWorkbook = new XSSFWorkbook();
         System.out.println("여긴?");
         try {
             System.out.println("try시작");
@@ -151,31 +153,62 @@ public class MainpageFirstFunctionService {
                     }
                 }
             }
-            File convertFile = new File("converted_file.xlsx");
+            // 아예 빈 행을 shift
+            int lastRowNum = sheet.getLastRowNum();
+            for (int i = lastRowNum; i >= 0; i--) {
+                if (sheet.getRow(i) == null || sheet.getRow(i).getPhysicalNumberOfCells() == 0) {
+                    sheet.shiftRows(i + 1, lastRowNum, -1);
+                }
+            }
+
+
+            File convertFile = new File("converted_temp.xlsx");
             convertWorkbook = new XSSFWorkbook(); // 새 엑셀 생성
             FileOutputStream fileoutputstream = new FileOutputStream(convertFile); // 추출
             XSSFSheet convertSheet = convertWorkbook.createSheet("convertSheet");
 
-            // 원본 sheet의 데이터를 새로운 sheet에 복사한다
             int sourceRowCount = sheet.getLastRowNum();
+            XSSFDataFormat fmt = convertWorkbook.createDataFormat();
+
+            XSSFCellStyle borderStyle = convertWorkbook.createCellStyle();
+            borderStyle.setBorderTop(BorderStyle.THIN);
+            borderStyle.setBorderBottom(BorderStyle.THIN);
+            borderStyle.setBorderLeft(BorderStyle.THIN);
+            borderStyle.setBorderRight(BorderStyle.THIN);
+
+            for (Row row : convertSheet) {
+                for (Cell cell : row) {
+                    cell.setCellStyle(borderStyle);
+                }
+            }
+
             for (int i = 0; i <= sourceRowCount; i++) {
                 XSSFRow sourceRow = sheet.getRow(i);
                 if (sourceRow != null) {
-                    // 복사할 row를 생성한다
                     XSSFRow newRow = convertSheet.createRow(i);
 
-                    // 원본 row의 데이터를 복사하여 새로운 row에 넣는다
                     int sourceCellCount = sourceRow.getLastCellNum();
                     for (int j = 0; j < sourceCellCount; j++) {
                         XSSFCell sourceCell = sourceRow.getCell(j);
                         if (sourceCell != null) {
-                            // 복사할 cell을 생성한다
                             XSSFCell newCell = newRow.createCell(j);
+                            XSSFCellStyle style = sourceCell.getCellStyle();
+                            XSSFCellStyle newStyle = convertWorkbook.createCellStyle();
+                            newStyle.cloneStyleFrom(style);
+                            double value;
 
-                            // 원본 cell의 데이터를 복사하여 새로운 cell에 넣는다
                             switch (sourceCell.getCellType()) {
                                 case NUMERIC:
-                                    newCell.setCellValue(sourceCell.getNumericCellValue());
+                                    value = sourceCell.getNumericCellValue();
+                                    newStyle.cloneStyleFrom(sourceCell.getCellStyle());
+                                    if (j == 6) { // G열일 때
+                                        newStyle.setDataFormat(fmt.getFormat("#,##0.00"));
+                                    } else { // G열 이외의 열일 때
+                                        newStyle.setDataFormat(fmt.getFormat("#,##0"));
+                                    }
+                                    newCell.setCellValue(value);
+                                    newCell.setCellStyle(newStyle);
+
                                     break;
                                 case BOOLEAN:
                                     newCell.setCellValue(sourceCell.getBooleanCellValue());
@@ -183,15 +216,22 @@ public class MainpageFirstFunctionService {
                                 case FORMULA:
                                     newCell.setCellFormula(sourceCell.getCellFormula());
                                     break;
-                                // 다른 cell type에 대한 처리도 필요하다면 추가 구현이 필요
                                 default:
                                     newCell.setCellValue(sourceCell.getStringCellValue());
                                     break;
                             }
+
+                            newCell.setCellStyle(newStyle);
+                            convertSheet.setColumnWidth(j, sheet.getColumnWidth(j));
                         }
                     }
                 }
             }
+
+
+
+
+
             convertWorkbook.write(fileoutputstream);
             System.out.println("엑셀파일생성성공");
 
@@ -203,6 +243,7 @@ public class MainpageFirstFunctionService {
 
             System.out.println("파일오픈 및 인풋스트림 닫기 성공");
             System.out.println("체크 컨버팅 up");
+            alertService.showInformationAlert("파일 변환 성공", "파일을 다운로드 할 수 있습니다.");
 
         } catch (FileNotFoundException e) {
             // 파일이 존재하지 않는 경우
