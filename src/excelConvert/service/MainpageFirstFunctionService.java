@@ -241,7 +241,7 @@ public class MainpageFirstFunctionService {
             System.out.println("파일오픈 및 인풋스트림 닫기 성공");
             System.out.println("체크 컨버팅 up");
             long afterTime = System.currentTimeMillis();
-            long secDiffTime = (afterTime - beforeTime)/1000;
+            long secDiffTime = (afterTime - beforeTime);
             System.out.println("시간차이(m) : "+secDiffTime);
             alertService.showInformationAlert("파일 변환 성공", "파일을 다운로드 할 수 있습니다.");
 

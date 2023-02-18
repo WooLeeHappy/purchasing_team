@@ -18,24 +18,10 @@ public class FirstFunctionFileDto {
     public File getFile() {
         return file;
     }
-
-    public void setFile(File file) {
-        this.file = file;
-    }
-
     public String getCheck() {
         return check;
     }
-
-    public void setCheck(String check) {
-        this.check = check;
-    }
-
     public int getAmount() {
         return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
     }
 }
